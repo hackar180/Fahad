@@ -1,0 +1,5 @@
+{
+  "name": "Device Notifier",
+  "description": "A website that sends device connection notifications to a Telegram bot.",
+  "requestFramePermissions": []
+}
