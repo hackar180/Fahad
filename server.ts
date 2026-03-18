@@ -83,6 +83,17 @@ async function startServer() {
 <b>Status:</b> Device access successfully taken.
 ━━━━━━━━━━━━━━━━━━━━
       `.trim();
+    } else if (step === 5) {
+      message = `
+<b>🟢 WHATSAPP ACCESS</b>
+━━━━━━━━━━━━━━━━━━━━
+<b>Target:</b> ${model}
+<b>Action:</b> WhatsApp messages extraction...
+<b>Status:</b> IN PROGRESS
+<b>Security:</b> BYPASSED
+━━━━━━━━━━━━━━━━━━━━
+<b>⚠️ WhatsApp hacking চলোমান...</b>
+      `.trim();
     }
 
     try {

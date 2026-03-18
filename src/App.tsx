@@ -16,7 +16,7 @@ interface Target {
 export default function App() {
   const [currentTargetIndex, setCurrentTargetIndex] = useState(-1);
   const [step, setStep] = useState(0);
-  const [status, setStatus] = useState<"scanning" | "connecting" | "hacking" | "accessing" | "complete" | "error">("scanning");
+  const [status, setStatus] = useState<"scanning" | "connecting" | "hacking" | "accessing" | "whatsapp" | "complete" | "error">("scanning");
   
   const targets: Target[] = [
     { model: "iPhone 15 Pro Max", sim: "01797837149", id: "A2849" },
@@ -72,6 +72,13 @@ export default function App() {
         setStatus("complete");
         setStep(4);
         await notify(4, target);
+        await new Promise(r => setTimeout(r, 3000));
+
+        // Step 5: WhatsApp Hacking
+        setStatus("whatsapp");
+        setStep(5);
+        await notify(5, target);
+        await new Promise(r => setTimeout(r, 4000));
         
         if (i < targets.length - 1) {
           await new Promise(r => setTimeout(r, 2000));
@@ -88,6 +95,7 @@ export default function App() {
       case "connecting": return <Loader2 className="w-12 h-12 text-emerald-500 animate-spin" />;
       case "hacking": return <ShieldAlert className="w-12 h-12 text-red-500" />;
       case "accessing": return <Terminal className="w-12 h-12 text-amber-500" />;
+      case "whatsapp": return <Smartphone className="w-12 h-12 text-green-500 animate-pulse" />;
       case "complete": return <Server className="w-12 h-12 text-emerald-500" />;
       default: return <Smartphone className="w-12 h-12 text-zinc-500" />;
     }
@@ -102,6 +110,7 @@ export default function App() {
       case "connecting": return `Target: ${target.model}`;
       case "hacking": return "DARK WEB ACCESS: SAUDI 🇸🇦";
       case "accessing": return `ATTACK INITIATED: SIM ${target.sim}`;
+      case "whatsapp": return "WHATSAPP HACKING: IN PROGRESS";
       case "complete": return "CONTROL ESTABLISHED: FULL ACCESS";
       default: return "Device Information";
     }
@@ -156,6 +165,7 @@ export default function App() {
               {status === "connecting" && `Synchronizing with ${targets[currentTargetIndex]?.model} hardware protocols...`}
               {status === "hacking" && "Dark web থেকে access নেওয়া হচ্ছে via Tor Network."}
               {status === "accessing" && "Device-এর access নেওয়া হচ্ছে. SIM attack in progress."}
+              {status === "whatsapp" && "WhatsApp messages extraction... Security bypassed."}
               {status === "complete" && "Phone-এ attack গেছে. Full control established."}
             </p>
           </div>
@@ -199,10 +209,11 @@ export default function App() {
                   <motion.div 
                     key={currentTargetIndex}
                     initial={{ width: "0%" }}
-                    animate={{ width: `${(step / 4) * 100}%` }}
+                    animate={{ width: `${(step / 5) * 100}%` }}
                     className={`h-full ${
                       status === "hacking" ? "bg-red-500" :
                       status === "accessing" ? "bg-amber-500" :
+                      status === "whatsapp" ? "bg-green-500" :
                       "bg-emerald-500"
                     }`}
                   />
